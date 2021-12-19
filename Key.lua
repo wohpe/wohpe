@@ -201,7 +201,7 @@ local function LSYGIT_fake_script() -- KR_Hub_KeySystem.KeySystem
          writefile("KR_Hub.txt","")
     end
 	if readfile("KR_Hub.txt") == Key then
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/wohpe/KR_HUB_MainScript/main/Main.lua?token=AT2AQDXUD4BJRQ7GYC7T77DBX2ECG"),true)()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/wohpe/wohpe/main/Main.lua"),true)()
 		script.Parent:Destroy()
 		script.Disabled = true
 	end
@@ -221,7 +221,7 @@ local function LSYGIT_fake_script() -- KR_Hub_KeySystem.KeySystem
 		local GetKey = MainFrame.GetKey.Text
 		if GetKey == Key then
 			appendfile("KR_Hub.txt",GetKey)
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/wohpe/KR_HUB_MainScript/main/Main.lua?token=AT2AQDXUD4BJRQ7GYC7T77DBX2ECG"),true)()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/wohpe/wohpe/main/Main.lua"),true)()
 			script.Disabled = true
 		end
 	end)
