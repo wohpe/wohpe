@@ -1,7 +1,7 @@
 -- Gui to Lua
--- Version: 3.3 (Edit by Hdklqd)
+-- Version: 3.2
 
--- Instances:
+-- Instances:https://github.com/wohpe/wohpe/blob/main/Main.lua
 
 local KR_Hub = Instance.new("ScreenGui")
 local DragFrame = Instance.new("Frame")
@@ -9,7 +9,6 @@ local UnterGame = Instance.new("Frame")
 local Gun_Kill = Instance.new("TextButton")
 local Gun_Kill_GetPlayer = Instance.new("TextBox")
 local Gun_Kill_loop = Instance.new("TextButton")
-local NoTimeGet = Instance.new("TextLabel")
 local AutoGetP1 = Instance.new("TextButton")
 local Fake_Steal = Instance.new("TextButton")
 local esp = Instance.new("TextButton")
@@ -39,6 +38,7 @@ local UICorner_3 = Instance.new("UICorner")
 
 KR_Hub.Name = "KR_Hub"
 KR_Hub.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+KR_Hub.Enabled = false
 KR_Hub.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 KR_Hub.DisplayOrder = 999999999
 KR_Hub.ResetOnSpawn = false
@@ -102,20 +102,6 @@ Gun_Kill_loop.Text = "loop:off"
 Gun_Kill_loop.TextColor3 = Color3.fromRGB(255, 255, 255)
 Gun_Kill_loop.TextSize = 10.000
 Gun_Kill_loop.TextWrapped = true
-
-NoTimeGet.Name = "NoTimeGet"
-NoTimeGet.Parent = UnterGame
-NoTimeGet.AnchorPoint = Vector2.new(0.5, 0.5)
-NoTimeGet.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-NoTimeGet.BackgroundTransparency = 1.000
-NoTimeGet.Position = UDim2.new(0.699999988, 0, 0.439388394, 0)
-NoTimeGet.Size = UDim2.new(0, 59, 0, 19)
-NoTimeGet.Font = Enum.Font.SourceSansBold
-NoTimeGet.Text = "Not Found"
-NoTimeGet.TextColor3 = Color3.fromRGB(255, 255, 255)
-NoTimeGet.TextScaled = true
-NoTimeGet.TextSize = 14.000
-NoTimeGet.TextWrapped = true
 
 AutoGetP1.Name = "AutoGetP1"
 AutoGetP1.Parent = UnterGame
@@ -370,7 +356,7 @@ UICorner_3.Parent = ReSpawn
 
 -- Scripts:
 
-local function UGYJAG_fake_script() -- KR_Hub.MainScript 
+local function KYVI_fake_script() -- KR_Hub.MainScript 
 	local script = Instance.new('LocalScript', KR_Hub)
 
 	local GameId = game.PlaceId
@@ -381,6 +367,7 @@ local function UGYJAG_fake_script() -- KR_Hub.MainScript
 				game.CoreGui.KR_Hub:Destroy()
 			end
 			script.Parent.Parent = game.CoreGui
+			script.Parent.Enabled = true
 		end
 	end)
 	
@@ -490,7 +477,6 @@ local function UGYJAG_fake_script() -- KR_Hub.MainScript
 	local MainFrame = script.Parent.DragFrame.MainFrame
 	local UnterGame = script.Parent.DragFrame.UnterGame
 	local Hub = script.Parent.DragFrame.Hub
-	local No = nil
 	local NoScript = nil
 	local AutoP1Get = false
 	local esp = false
@@ -498,26 +484,25 @@ local function UGYJAG_fake_script() -- KR_Hub.MainScript
 	
 	for _, v in pairs(game.Workspace:GetChildren()) do
 		if v:IsA("Model") then
-			if v:FindFirstChild("No") then
-				if v:FindFirstChild("No"):FindFirstChildOfClass("SurfaceGui") and v:FindFirstChild("No"):FindFirstChildOfClass("PointLight") then
-					if v:FindFirstChild("No"):FindFirstChildOfClass("SurfaceGui"):FindFirstChildOfClass("TextLabel") then
-						No = v:FindFirstChild("No"):FindFirstChildOfClass("SurfaceGui"):FindFirstChildOfClass("TextLabel")
-					end
-				end
-			end
 			for _, v2 in pairs(v:GetChildren()) do
 				if v2:IsA("BasePart") then
-					if v2:FindFirstChild("P1") then
-						if v2:FindFirstChild("P1"):IsA("Script") then
-							NoScript = v2
+					if v2:FindFirstChildOfClass("MeshPart") then
+						if v2:FindFirstChildOfClass("MeshPart").MeshId == "rbxassetid://5049754335" then
+							if v2:FindFirstChildOfClass("Script") then
+								NoScript = v2
+							end
 						end
 					end
 				end
 			end
 		end
 	end
-	
-	
+	local NoScriptcf = CFrame.new(0,0,0)
+	local NoScriptsize = Vector3.new(1,1,1)
+	if NoScript then
+		NoScriptcf = NoScript.CFrame
+		NoScriptsize = NoScript.Size
+	end
 	
 	spawn(function()
 		while not script.Disabled do
@@ -534,20 +519,30 @@ local function UGYJAG_fake_script() -- KR_Hub.MainScript
 						--		game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") .CFrame = game.Workspace:FindFirstChildOfClass("SpawnLocation").CFrame * CFrame.new(0,3,0)
 						--	end
 						--end
+						if AutoP1Get == true then
+							if game.Players.LocalPlayer.Character:FindFirstChild("P") then
+								local humanoid = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+								if humanoid then 
+									humanoid:UnequipTools()
+								end
+							end
+						end
 						spawn(function()
 							if NoScript ~= nil then
 								if AutoP1Get == true then
 									NoScript.Anchored = true
 									NoScript.CanCollide = false
 									NoScript.Transparency = 1
-									NoScript.Size = Vector3.new(3,3,3)
-									NoScript.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame
+									NoScript.Size = Vector3.new(10,10,10)
+									pcall(function()
+										NoScript.CFrame = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame
+									end)
 								else
 									NoScript.Anchored = true
 									NoScript.CanCollide = false
 									NoScript.Transparency = 0.5
-									NoScript.Size = Vector3.new(10, 10, 0.5)
-									NoScript.CFrame = CFrame.new(-54, 3.25, 284, -1, 0, 0, 0, 0, 1, 0, 1, -0)
+									NoScript.Size = NoScriptsize
+									NoScript.CFrame = NoScriptcf
 								end
 							end
 						end)
@@ -562,12 +557,12 @@ local function UGYJAG_fake_script() -- KR_Hub.MainScript
 													local N1 = 0
 													for _, v in pairs(Player.Backpack:GetChildren()) do
 														if v:IsA("Tool") then
-															if v.Name == "P1" then
+															if v.Name == "P" then
 																P1 += 1
 															end
 														end
 													end
-													if Player.Character:FindFirstChild("P1") then
+													if Player.Character:FindFirstChild("P") then
 														P1 += 1
 													end
 													local NameGui = script.NameGui:Clone()
@@ -585,12 +580,12 @@ local function UGYJAG_fake_script() -- KR_Hub.MainScript
 													local P1 = 0
 													for _, v in pairs(Player.Backpack:GetChildren()) do
 														if v:IsA("Tool") then
-															if v.Name == "P1" then
+															if v.Name == "P" then
 																P1 += 1
 															end
 														end
 													end
-													if Player.Character:FindFirstChild("P1") then
+													if Player.Character:FindFirstChild("P") then
 														P1 += 1
 													end
 													local NameGui = Player.Character:FindFirstChild("Head"):FindFirstChild("NameGui")
@@ -629,25 +624,6 @@ local function UGYJAG_fake_script() -- KR_Hub.MainScript
 			NoScript.CFrame = CFrame.new(-54, 3.25, 284, -1, 0, 0, 0, 0, 1, 0, 1, -0)
 		end
 	end)
-	
-	
-	
-	if No ~= nil then
-		spawn(function()
-			No:GetPropertyChangedSignal("Text"):Connect(function()
-				if not script.Disabled then
-					if No.Text == "0" or No.Text == "" then
-						UnterGame.NoTimeGet.Text = "Get P1"
-					else
-						UnterGame.NoTimeGet.Text = "P1:" .. No.Text
-					end
-				end
-			end)
-		end)
-	else
-		UnterGame.NoTimeGet.Text = "P1:X"
-	end
-	
 	
 	local Mouse = game.Players.LocalPlayer:GetMouse()
 	local MouseClickKill = false
@@ -814,10 +790,10 @@ local function UGYJAG_fake_script() -- KR_Hub.MainScript
 								local Target = plr
 								if Target and Target.Character then
 									local Dead = false
-									local P1 =  game.Players.LocalPlayer.Backpack:FindFirstChild("P1") or game.Players.LocalPlayer.Character:FindFirstChild("P1")
-									if game.Players.LocalPlayer.Backpack:FindFirstChild("P1") and Dead == false then
+									local P1 =  game.Players.LocalPlayer.Backpack:FindFirstChild("P") or game.Players.LocalPlayer.Character:FindFirstChild("P")
+									if game.Players.LocalPlayer.Backpack:FindFirstChild("P") and Dead == false then
 										if P1:FindFirstChild("Handle") then
-											for _, v in pairs(game.Players.LocalPlayer.Backpack:FindFirstChild("P1"):FindFirstChild("Handle"):GetDescendants()) do
+											for _, v in pairs(game.Players.LocalPlayer.Backpack:FindFirstChild("P"):FindFirstChild("Handle"):GetDescendants()) do
 												if v:IsA("Sound") then 
 													v:Destroy()
 												end
@@ -850,10 +826,10 @@ local function UGYJAG_fake_script() -- KR_Hub.MainScript
 							local Target = plr
 							if Target and Target.Character then
 								local Dead = false
-								local P1 =  game.Players.LocalPlayer.Backpack:FindFirstChild("P1") or game.Players.LocalPlayer.Character:FindFirstChild("P1")
-								if game.Players.LocalPlayer.Backpack:FindFirstChild("P1") and Dead == false then
+								local P1 =  game.Players.LocalPlayer.Backpack:FindFirstChild("P") or game.Players.LocalPlayer.Character:FindFirstChild("P")
+								if game.Players.LocalPlayer.Backpack:FindFirstChild("P") and Dead == false then
 									if P1:FindFirstChild("Handle") then
-										for _, v in pairs(game.Players.LocalPlayer.Backpack:FindFirstChild("P1"):FindFirstChild("Handle"):GetDescendants()) do
+										for _, v in pairs(game.Players.LocalPlayer.Backpack:FindFirstChild("P"):FindFirstChild("Handle"):GetDescendants()) do
 											if v:IsA("Sound") then 
 												v:Destroy()
 											end
@@ -910,14 +886,14 @@ local function UGYJAG_fake_script() -- KR_Hub.MainScript
 		if NoScript ~= nil then
 			for _, v in pairs(game.workspace:GetDescendants()) do
 				if v:IsA("Tool") then 
-					if v.Name == "P1" then
+					if v.Name == "P" then
 						v.Parent = game.Players.LocalPlayer.Backpack
 					end
 				end
 			end
 			for _, v in pairs(game.Players:GetDescendants()) do
 				if v:IsA("Tool") then 
-					if v.Name == "P1" then
+					if v.Name == "P" then
 						v.Parent = game.Players.LocalPlayer.Backpack
 					end
 				end
@@ -974,4 +950,4 @@ local function UGYJAG_fake_script() -- KR_Hub.MainScript
 		end
 	end
 end
-coroutine.wrap(UGYJAG_fake_script)()
+coroutine.wrap(KYVI_fake_script)()
