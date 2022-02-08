@@ -1,7 +1,7 @@
 -- Gui to Lua
--- Version: 3.2
+-- Version: 3.3 (Edit by Hdklqd)
 
--- Instances:https://github.com/wohpe/wohpe/blob/main/Main.lua
+-- Instances:
 
 local KR_Hub = Instance.new("ScreenGui")
 local DragFrame = Instance.new("Frame")
